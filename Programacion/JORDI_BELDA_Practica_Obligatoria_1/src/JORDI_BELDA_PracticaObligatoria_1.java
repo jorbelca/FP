@@ -21,39 +21,55 @@ public class JORDI_BELDA_PracticaObligatoria_1 {
         // 4.RESULTADO[0-GANA USUARIO;1-GANA MAQUINA ]
         int round = 1;
         int countResult = 0;
+        int parNonElection = 0;
+        int num = -1;
 
         String titlePresentation = "Bienvenido al juego de pares o nones";
         String messagePresentation = "<html>Usted va a jugar al juego de pares o nones, condiciones :<br><br><p>1. Jugará contra la maquina</p><p>2. Primero deberá elegir si quiere pares o nones</p><p>3. Elegirá un número de 0 a 50</p><p>4. Si la suma de su numero y el de la maquina es par ganan PARES si no NONES</p><p>5. El mejor de 5 gana la partida</p></html> ";
         String titleProgram = "RONDA ";
         String messageParNone = "Elija: ";
         String parNon[] = { "Nones", "Pares" };
-        String messageNum = "Ingrese un numero: ";
+        String messageNum = "Ingrese un numero entre 0 y 50 : ";
         String titleFinal = "RESULTADOS";
 
         // PANTALLA INFO
         JOptionPane.showMessageDialog(null, messagePresentation, titlePresentation,
                 JOptionPane.INFORMATION_MESSAGE);
 
-        for (int i = 0; i < 1; i++) {
+        do {
             // PANTALLA ELEGIR PARES O NONES
-            int parNonElection = JOptionPane.showOptionDialog(null, messageParNone, titleProgram + round,
+            parNonElection = JOptionPane.showOptionDialog(null, messageParNone, titleProgram + round,
                     JOptionPane.DEFAULT_OPTION,
                     JOptionPane.INFORMATION_MESSAGE, null,
                     parNon, null);
 
             // PARES = 0 NONES =1
-            if (parNonElection >= 0) {
+
+            // SI ELIGE SALIR
+            if (parNonElection == -1) {
+
+                break;
+
+            } else {
+
                 // PANTALLA INTRODUCIR NUMERO
-                String stringNum = JOptionPane.showInputDialog(null, messageNum, titleProgram + round,
-                        JOptionPane.PLAIN_MESSAGE);
-                int num = Integer.parseInt(stringNum);
-                // GENERAR NUMERO DE LA MAQUINA
-                int machineNum = numGenerator();
-                // VARIABLE GANADOR
-                int winner = 0;
+
+                do {
+                    String stringNum = JOptionPane.showInputDialog(null, messageNum, titleProgram + round,
+                            JOptionPane.PLAIN_MESSAGE);
+                    num = Integer.parseInt(stringNum);
+                    if (num < 0 || num > 50) {
+                        JOptionPane.showMessageDialog(null, "ERROR, el numero debe encontrarse entre 0 y 50",
+                                titleProgram + round, JOptionPane.PLAIN_MESSAGE);
+                    }
+                } while (num < 0 && num > 50 && parNonElection >= 0);
 
                 if (num >= 0 && num <= 50) {
 
+                    // GENERAR NUMERO DE LA MAQUINA
+                    int machineNum = numGenerator();
+                    // VARIABLE GANADOR
+                    int winner = 0;
                     if (parNonElection == 1 && (machineNum + num) % 2 == 0) {
                         // ELIGE PARES Y SALE PARES
                         JOptionPane.showMessageDialog(null,
@@ -95,21 +111,15 @@ public class JORDI_BELDA_PracticaObligatoria_1 {
                                 JOptionPane.PLAIN_MESSAGE);
                     }
 
+                    int res[] = { num, machineNum, parNonElection, winner };
+                    results[round - 1] = res;
+                    winner = 0;
+                    round++;
                 }
-                round++;
-                int res[] = { num, machineNum, parNonElection, winner };
-                results[i] = res;
-                winner = 0;
-            }
-
-            // SI ELIGE SALIR
-            if (parNonElection == -1) {
-
-                break;
 
             }
 
-        }
+        } while (round <= 5);
 
         // GENERAR CABECERAS TABLA FINAL
         StringBuilder finalResults = new StringBuilder(
@@ -155,15 +165,18 @@ public class JORDI_BELDA_PracticaObligatoria_1 {
         finalResults.append("</html>");
 
         // MOSTRAR EL RESULTADO FINAL
-        JOptionPane.showMessageDialog(null, finalResults, titleFinal, JOptionPane.PLAIN_MESSAGE);
+        if (num >= 0 && num <= 50 && parNonElection >= 0) {
+            JOptionPane.showMessageDialog(null, finalResults, titleFinal, JOptionPane.PLAIN_MESSAGE);
+        }
 
     }
 
     // FUNCION GENERADORA DEL NUMERO ALEATORIO DE LA MAQUINA
     public static int numGenerator() {
-        double random = Math.random() * 50;
+        double random = Math.random() * ((50 + 1) - 0) + 0;
         int num = (int) Math.round(random);
         return num;
 
     }
+
 }
