@@ -32,7 +32,7 @@ public class JORDI_BELDA_Practica_Recetas {
                         if (existeRecetaAEliminar) {
                             eliminarReceta(listadoRecetas, indiceRecetaAEliminar);
                         } else {
-                            System.out.println("El índice seleccionado no contienen ninguna receta almacenada");
+                            System.out.println("\nEl índice seleccionado no contienen ninguna receta almacenada");
                         }
                     }
                     break;
@@ -168,6 +168,8 @@ public class JORDI_BELDA_Practica_Recetas {
         listadoRecetas[indiceRecetaSeleccionada][2] = "";
         listadoRecetas[indiceRecetaSeleccionada][3] = "";
         System.out.println("Receta elminada correctamente");
+        // FUNCION QUE MUEVE EL INDICE ELIMINADO AL FINAL DEL ARRAY
+        moverIndices(listadoRecetas, indiceRecetaSeleccionada);
     }
 
     /**
@@ -270,4 +272,20 @@ public class JORDI_BELDA_Practica_Recetas {
         System.out.println("5. Salir\n");
     }
 
+    public static void moverIndices(String[][] listadoRecetas, int indiceRecetaSeleccionada) {
+        for (int i = indiceRecetaSeleccionada; i < listadoRecetas.length; i++) {
+            if (i < listadoRecetas.length - 1) {
+                listadoRecetas[i][0] = listadoRecetas[i + 1][0];
+                listadoRecetas[i][1] = listadoRecetas[i + 1][1];
+                listadoRecetas[i][2] = listadoRecetas[i + 1][2];
+                listadoRecetas[i][3] = listadoRecetas[i + 1][3];
+            } else {
+                listadoRecetas[i][0] = "";
+                listadoRecetas[i][1] = "";
+                listadoRecetas[i][2] = "";
+                listadoRecetas[i][3] = "";
+                break;
+            }
+        }
+    }
 }
